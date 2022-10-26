@@ -59,7 +59,7 @@
           <div class="row">
             <div class="col-md-9 col-lg-7 col-xl-6 mx-auto">
               <div class="subscribe-form">
-                <form class="mb-0" id="sf" name="sf" action="include/subscribe.php" method="post" autocomplete="off">
+                <form class="mb-0" id="sf" name="submit-to-google-sheet">
                   <div class="form-row">
 
                     <div class="col-12 col-md-9">
@@ -78,6 +78,7 @@
 
                   </div>
                 </form>
+                <span id="msg"></span>
                 <div class="subscribe-form-result text-center"></div>
               </div>
             </div>
@@ -124,6 +125,24 @@
 
     <!-- Theme JS -->
     <script src="assets/js/main.js"></script>
+    <script>
+      const scriptURL = 'https://script.google.com/macros/s/AKfycbxsNz1C9LFLZTwc4a14N3X57aLB8bDH8wS7Zn-1m7hnWfsCpREsBXSTFbwunifijoaaGw/exec'
+      const form = document.forms['submit-to-google-sheet']
+      const msg = document.getElementById("msg")
+    
+      form.addEventListener('submit', e => {
+        e.preventDefault()
+        fetch(scriptURL, { method: 'POST', body: new FormData(form)})
+          .then(response => {
+              msg.innerHTML = "Thank you!"
+              setTimeout(function(){
+                msg.innerHTML = ""
+              },3000)
+              form.reset()
+          })
+          .catch(error => console.error('Error!', error.message))
+      })
+    </script>
 
   </body>
 </html>
